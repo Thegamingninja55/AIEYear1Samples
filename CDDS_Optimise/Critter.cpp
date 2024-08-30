@@ -25,10 +25,19 @@ void Critter::Init(Vector2 position, Vector2 velocity, float radius, const char*
 
 	m_isLoaded = true;
 }
+void Critter::Respawn(Vector2 position, Vector2 velocity, float radius)
+{
+	m_position = position;
+	m_velocity = velocity;
+	m_radius = radius;
+
+	m_isLoaded = true;
+}
+
 
 void Critter::Destroy()
 {
-	UnloadTexture(m_texture);
+	//UnloadTexture(m_texture);
 	m_isLoaded = false;
 }
 

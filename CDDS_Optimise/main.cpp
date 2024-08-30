@@ -130,6 +130,7 @@ int main(int argc, char* argv[])
             {
                 critters[i].Destroy();
                 // this would be the perfect time to put the critter into an object pool
+
             }
         }
                 
@@ -140,7 +141,7 @@ int main(int argc, char* argv[])
                 if (i == j || critters[i].IsDirty()) // note: the other critter (j) could be dirty - that's OK
                     continue;
                 // check every critter against every other critter
-                float dist = Vector2Distance(critters[i].GetPosition(), critters[j].GetPosition());
+                float dist = Vector2Distance(critters[i].GetPosition(), critters[j].GetPosition()); //to optimise
                 if (dist < critters[i].GetRadius() + critters[j].GetRadius())
                 {
                     // collision!
@@ -179,7 +180,7 @@ int main(int argc, char* argv[])
                     Vector2 pos = destroyer.GetPosition();
                     pos = Vector2Add(pos, Vector2Scale(normal, -50));
                     // its pretty ineficient to keep reloading textures. ...if only there was something else we could do
-                    critters[i].Init(pos, Vector2Scale(normal, -MAX_VELOCITY), 12, "res/10.png");
+                    critters[i].Respawn(pos, Vector2Scale(normal, -MAX_VELOCITY), 12);
                     break;
                 }
             }

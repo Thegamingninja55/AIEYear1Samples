@@ -20,6 +20,7 @@ public:
 	~Critter();
 
 	void Init(Vector2 position, Vector2 velocity, float radius, const char* texture);
+	void Respawn(Vector2 position, Vector2 velocity, float radius);
 	void Destroy();
 	void Update(float dt);
 	void Draw();

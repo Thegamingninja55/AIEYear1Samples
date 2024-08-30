@@ -172,7 +172,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Critter.h" />
-    <ClInclude Include="Grid.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
