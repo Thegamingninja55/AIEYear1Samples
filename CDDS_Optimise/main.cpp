@@ -24,6 +24,11 @@
 #include <random>
 #include <time.h>
 #include "Critter.h"
+#include <chrono>
+#include <vector>
+#include <fstream>
+#include "Distance.h"
+#include <cmath>
 
 int main(int argc, char* argv[])
 {
@@ -36,6 +41,10 @@ int main(int argc, char* argv[])
 
     //SetTargetFPS(60);
     //--------------------------------------------------------------------------------------
+
+    using clock = std::chrono::high_resolution_clock;
+    using seconds = std::chrono::duration<float>;
+    std::vector<float> frameTimes;
 
     srand(time(NULL));
 
@@ -76,6 +85,7 @@ int main(int argc, char* argv[])
         //----------------------------------------------------------------------------------
         // TODO: Update your variables here
         //----------------------------------------------------------------------------------
+        auto frameStart = clock::now();
 
         float delta = GetFrameTime();
 
@@ -141,8 +151,9 @@ int main(int argc, char* argv[])
                 if (i == j || critters[i].IsDirty()) // note: the other critter (j) could be dirty - that's OK
                     continue;
                 // check every critter against every other critter
-                float dist = Vector2Distance(critters[i].GetPosition(), critters[j].GetPosition()); //to optimise
-                if (dist < critters[i].GetRadius() + critters[j].GetRadius())
+                float dist = Vector2DistanceSqrd(critters[i].GetPosition(), critters[j].GetPosition()); //to optimise
+                float sqrrad = (critters[i].GetRadius() + critters[j].GetRadius());
+                if (dist < sqrrad * sqrrad)
                 {
                     // collision!
                     // do math to get critters bouncing
@@ -208,6 +219,11 @@ int main(int argc, char* argv[])
 
         EndDrawing();
         //----------------------------------------------------------------------------------
+
+        auto frameStop = clock::now();
+        auto frameElapsed = std::chrono::duration_cast<seconds>(frameStop - frameStart);
+
+        frameTimes.push_back(frameElapsed.count());
     }
 
     for (int i = 0; i < CRITTER_COUNT; i++)
@@ -219,6 +235,13 @@ int main(int argc, char* argv[])
     //--------------------------------------------------------------------------------------   
     CloseWindow();        // Close window and OpenGL context
     //--------------------------------------------------------------------------------------
+
+    std::ofstream timing{"timing.csv"};
+
+    for (int i = 0; i < frameTimes.size(); i++)
+    {
+        timing << i << "," << frameTimes[i] << std::endl;
+    }
 
     return 0;
 }
