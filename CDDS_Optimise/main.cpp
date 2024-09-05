@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
     Critter critters[1000]; 
 
     // create some critters
-    const int CRITTER_COUNT = 50;
+    const int CRITTER_COUNT = 500;
     const int MAX_VELOCITY = 80;
 
     for (int i = 0; i < CRITTER_COUNT; i++)
@@ -135,8 +135,9 @@ int main(int argc, char* argv[])
 
             // kill any critter touching the destroyer
             // simple circle-to-circle collision check
-            float dist = Vector2Distance(critters[i].GetPosition(), destroyer.GetPosition());
-            if (dist < critters[i].GetRadius() + destroyer.GetRadius())
+            float dist = Vector2DistanceSqrd(critters[i].GetPosition(), destroyer.GetPosition());
+            float sqrrad = (critters[i].GetRadius() + destroyer.GetRadius()) * (critters[i].GetRadius() + destroyer.GetRadius());
+            if (dist < sqrrad)
             {
                 critters[i].Destroy();
                 // this would be the perfect time to put the critter into an object pool
@@ -151,9 +152,11 @@ int main(int argc, char* argv[])
                 if (i == j || critters[i].IsDirty()) // note: the other critter (j) could be dirty - that's OK
                     continue;
                 // check every critter against every other critter
+                if (critters[i].IsDead() || critters[j].IsDead())
+                    continue;
                 float dist = Vector2DistanceSqrd(critters[i].GetPosition(), critters[j].GetPosition()); //to optimise
-                float sqrrad = (critters[i].GetRadius() + critters[j].GetRadius());
-                if (dist < sqrrad * sqrrad)
+                float sqrrad = (critters[i].GetRadius() + critters[j].GetRadius()) * (critters[i].GetRadius() + critters[j].GetRadius());
+                if (dist < sqrrad)
                 {
                     // collision!
                     // do math to get critters bouncing
