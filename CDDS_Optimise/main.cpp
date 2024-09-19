@@ -154,14 +154,12 @@ int main(int argc, char* argv[])
         }
                 
         // check for critter-on-critter collisions
-        for (int i = 0; i < CRITTER_COUNT; i++)
+        for (int i = 0; i < deadPlacement - 1; i++)
         {            
-            for (int j = 0; j < CRITTER_COUNT; j++){
+            for (int j = 0; j < deadPlacement - 1; j++){
                 if (i == j || critters[i].IsDirty()) // note: the other critter (j) could be dirty - that's OK
                     continue;
                 // check every critter against every other critter
-                if (critters[i].IsDead() || critters[j].IsDead())
-                    continue;
                 float dist = Vector2DistanceSqrd(critters[i].GetPosition(), critters[j].GetPosition()); //to optimise
                 float sqrrad = (critters[i].GetRadius() + critters[j].GetRadius()) * (critters[i].GetRadius() + critters[j].GetRadius());
                 if (dist < sqrrad)
@@ -192,7 +190,7 @@ int main(int argc, char* argv[])
             timer = 1;
 
             // find any dead critters and spit them out (respawn)
-            for (int i = deadPlacement; i < CRITTER_COUNT; i++)
+            while (deadPlacement < CRITTER_COUNT)
             {
                 //if (critters[i].IsDead())
                 //{
@@ -202,9 +200,8 @@ int main(int argc, char* argv[])
                     Vector2 pos = destroyer.GetPosition();
                     pos = Vector2Add(pos, Vector2Scale(normal, -50));
                     // its pretty ineficient to keep reloading textures. ...if only there was something else we could do
-                    critters[i].Respawn(pos, Vector2Scale(normal, -MAX_VELOCITY), 12);
+                    critters[deadPlacement].Respawn(pos, Vector2Scale(normal, -MAX_VELOCITY), 12);
                     deadPlacement++;
-                    break;
                 //}
             }
             nextSpawnPos = destroyer.GetPosition();
