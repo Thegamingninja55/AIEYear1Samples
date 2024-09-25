@@ -156,7 +156,7 @@ int main(int argc, char* argv[])
         // check for critter-on-critter collisions
         for (int i = 0; i < deadPlacement - 1; i++)
         {            
-            for (int j = 0; j < deadPlacement - 1; j++){
+            for (int j = i; j < deadPlacement - 1; j++){
                 if (i == j || critters[i].IsDirty()) // note: the other critter (j) could be dirty - that's OK
                     continue;
                 // check every critter against every other critter
@@ -202,6 +202,7 @@ int main(int argc, char* argv[])
                     // its pretty ineficient to keep reloading textures. ...if only there was something else we could do
                     critters[deadPlacement].Respawn(pos, Vector2Scale(normal, -MAX_VELOCITY), 12);
                     deadPlacement++;
+                    break;
                 //}
             }
             nextSpawnPos = destroyer.GetPosition();
