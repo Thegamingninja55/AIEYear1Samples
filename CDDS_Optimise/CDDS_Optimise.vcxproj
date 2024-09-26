@@ -173,6 +173,7 @@
   <ItemGroup>
     <ClInclude Include="Critter.h" />
     <ClInclude Include="Distance.h" />
+    <ClInclude Include="ObjectPool.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
